@@ -1,13 +1,15 @@
-﻿# Credit to https://adamtheautomator.com/how-to-sign-powershell-script/ for creating self-signed cert, adding to stores, testing the additions, and 
-# signing the script. Re-signing a script after modification is required for running post-mod. 
-# RUN THIS SCRIPT AS ADMINISTRATOR
+﻿# Credit to https://adamtheautomator.com/how-to-sign-powershell-script/ for how to create self-signed cert, add to stores, test the additions, and 
+# sign the script. 
+# Re-signing a script after modification is required for running post-mod. 
+# RUN THIS SCRIPT AS ADMINISTRATOR - on initial set-up, bypass this script or self-sign it on your machine! 
 
 # if current self-signed cert doesn't exist in personal or if expired, create new one
-$global:codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
-$certExpirationObj = $global:codeCertificate | Select-Object NotAfter
-if ($certExpirationObj) { $certExpiration = $certExpirationObj.NotAfter.Date }
+$codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
 
-if (!$codeCertificate -or !$certExpiration -or ($certExpiration -lt (Get-Date).Date)) { 
+$certExpirationObj = $codeCertificate | Select-Object NotAfter
+if ($certExpirationObj -ne $null) { $certExpiration = $certExpirationObj.NotAfter.Date }
+
+if ($codeCertificate -eq $null -or $certExpirationObj -eq $null -or ($certExpiration -lt (Get-Date).Date)) { 
     Write-Output "Self-signed cert doesn't exist in local system, or current self-signed certificate is expired. Creating ATA Authenticode cert in cert stores..." 
 
     # Generate a self-signed Authenticode certificate in the local computer's personal certificate store.
@@ -41,11 +43,11 @@ if (!$codeCertificate -or !$certExpiration -or ($certExpiration -lt (Get-Date).D
      Get-ChildItem Cert:\LocalMachine\TrustedPublisher | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
 
      # Get the code-signing certificate from the local computer's certificate store with the name *ATA Authenticode* and store it to the $codeCertificate variable.
-    $global:codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
+    $codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
 
 } else {
     Write-Output "Current self-signing certificate exists on system: "
-    Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
+    $codeCertificate
 }
 
 # Prompt user for script path
