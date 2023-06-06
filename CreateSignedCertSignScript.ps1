@@ -1,12 +1,13 @@
 ﻿# Credit to https://adamtheautomator.com/how-to-sign-powershell-script/ for creating self-signed cert, adding to stores, testing the additions, and 
-# signing the script.
+# signing the script. Re-signing a script after modification is required for running post-mod. 
 # RUN THIS SCRIPT AS ADMINISTRATOR
 
 # if current self-signed cert doesn't exist in personal or if expired, create new one
-$codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
-$certExpiration = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"} | Select-Object NotAfter
+$global:codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
+$certExpirationObj = $global:codeCertificate | Select-Object NotAfter
+if ($certExpirationObj) { $certExpiration = $certExpirationObj.NotAfter.Date }
 
-if (!$codeCertificate -or !$certExpiration -or $certExpiration > Get-Date) { 
+if (!$codeCertificate -or !$certExpiration -or ($certExpiration -lt (Get-Date).Date)) { 
     Write-Output "Self-signed cert doesn't exist in local system, or current self-signed certificate is expired. Creating ATA Authenticode cert in cert stores..." 
 
     # Generate a self-signed Authenticode certificate in the local computer's personal certificate store.
@@ -40,14 +41,17 @@ if (!$codeCertificate -or !$certExpiration -or $certExpiration > Get-Date) {
      Get-ChildItem Cert:\LocalMachine\TrustedPublisher | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
 
      # Get the code-signing certificate from the local computer's certificate store with the name *ATA Authenticode* and store it to the $codeCertificate variable.
-    $codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
+    $global:codeCertificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
 
+} else {
+    Write-Output "Current self-signing certificate exists on system: "
+    Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=ATA Authenticode"}
 }
 
 # Prompt user for script path
 $scriptPath = Read-Host -Prompt "Enter full file path of the script to be signed: "
 
-# Sign the PowerShell script
+# Sign (or re-sign) the PowerShell script
 # PARAMETERS:
 # FilePath - Specifies the file path of the PowerShell script to sign, eg. C:\ATA\myscript.ps1.
 # Certificate - Specifies the certificate to use when signing the script.
