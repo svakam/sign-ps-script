@@ -1,5 +1,7 @@
 # sign-ps-script
-Script for creating a new cert on your local Windows machine and, with it, signing another script you wish to safely run against *All-Signed* restrictions. 
+Script for creating a new cert on your local Windows machine and, with it, signing another script you wish to safely run within *All-Signed* restrictions. 
+
+NOTE: Credit goes to [Adam the Automator](https://adamtheautomator.com/how-to-sign-powershell-script/) for the code that creates the self-signed cert, adding it to cert stores, testing the additions, and signing the input script.  
 
 The premise is that Windows systems are by-default protected from external or internal malicious script execution with safeguard [Windows execution policies](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.3), such as *All-Signed* or *Remote-Signed* - the aforementioned allowing only signed scripts to run on your machine. If you have a script you need to run on your system without potentially dangerous modifications to your execution policies (i.e. system-wide-allowing all scripts to run without restriction via ```Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine```), you can run this script to create a self-signed certificate in your machine to authenticate (sign) your local scripts to run safely. 
 
@@ -15,3 +17,4 @@ Once you download this helper script onto your Windows machine, you'd have to in
 If successful, you should have some copies of the certificate ```ATA Authenticode``` installed in your "Local Computer" cert store. In addition, your helper script should now contain a digital signature at the end of the file. 
 
 Just run this now-authorized helper script against any unsigned script. 
+
