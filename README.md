@@ -1,5 +1,5 @@
 # sign-ps-script
-Script for creating a new cert on your local Windows machine and, with it, signing another script you wish to safely run within *All-Signed* restrictions. 
+Script for creating a new cert on your local Windows machine and, with it, signing another script you wish to safely run within safe Execution Policy restrictions. 
 
 **NOTE:** Credit goes to <a href="https://adamtheautomator.com/how-to-sign-powershell-script/" target="_blank">Adam the Automator</a> for the code that creates the self-signed cert, adding it to cert stores, testing the additions, and signing the input script.  
 
