@@ -18,3 +18,4 @@ If successful, you should have some copies of the certificate ```ATA Authenticod
 
 Just run this now-authorized helper script against any unsigned script. 
 
+NOTE: if you modify a script after it's signed, just re-run the helper against the modified to re-sign it. It won't work otherwise. 
