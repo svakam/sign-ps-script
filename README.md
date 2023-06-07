@@ -12,4 +12,6 @@ Once you download this helper script onto your Windows machine, you'd have to in
 4. In this session, run the helper script with the user-prompted file path being the helper script. 
 5. Exit the session. 
 
-If successful, you should have 
+If successful, you should have some copies of the certificate ```ATA Authenticode``` installed in your "Local Computer" cert store. In addition, your helper script should now contain a digital signature at the end of the file. 
+
+Just run this now-authorized helper script against any unsigned script. 
