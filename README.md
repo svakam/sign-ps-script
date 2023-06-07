@@ -19,4 +19,5 @@ If successful, you should have some copies of the certificate ```ATA Authenticod
 Just run this now-authorized helper script against any unsigned script. 
 
 **NOTE:** If you modify a script after it's signed, just re-run the helper against the new script to re-sign it. It won't work otherwise. 
+
 **NOTE:** If you push the helper to a remote repository, ensure you delete the signature at the bottom. 
