@@ -1,7 +1,7 @@
 # sign-ps-script
 Script for creating a new cert on your local Windows machine and, with it, signing another script you wish to safely run within safe Execution Policy restrictions. 
 
-**NOTE:** Credit goes to <a href="https://adamtheautomator.com/how-to-sign-powershell-script/" target="_blank">Adam the Automator</a> for the code that creates the self-signed cert, adding it to cert stores, testing the additions, and signing the input script.  
+**Disclaimer:** Credit goes to <a href="https://adamtheautomator.com/how-to-sign-powershell-script/" target="_blank">Adam the Automator</a> for the code that creates the self-signed cert, adding it to cert stores, testing the additions, and signing the input script.  
 
 The premise is that Windows systems are by-default protected from external or internal malicious script execution with safeguard <a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.3" target="_blank">Windows execution policies</a>, such as ```All-Signed``` or ```Remote-Signed``` - the aforementioned allowing only signed scripts to run on your machine. If you have a script you need to run on your system without potentially dangerous modifications to your execution policies (i.e. system-wide-allowing all scripts to run without restriction via ```Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine```), you can run this script to create a self-signed certificate in your machine to authenticate (sign) your local scripts to run safely. 
 
